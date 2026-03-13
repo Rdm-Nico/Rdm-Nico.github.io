@@ -459,11 +459,11 @@
     }
 
     /* ============================================================
-       PROJECTS — HORIZONTAL SCROLL GALLERY
+       PROJECTS — SCROLL-PINNED HORIZONTAL GALLERY (Motion.js)
     ============================================================ */
     #projects { padding: 120px 0 0; }
 
-    #projects .section-head { margin-bottom: 0; }
+    #projects .section-head { margin-bottom: 48px; }
 
     .projects-scroll-hint {
       font-size: 0.68rem;
@@ -476,39 +476,41 @@
     }
 
     .projects-scroll-hint svg {
-      width: 20px; height: 20px;
-      animation: nudge 2.2s var(--ease) infinite;
+      width: 16px; height: 16px;
+      animation: nudge 2.4s var(--ease) infinite;
     }
 
     @keyframes nudge {
-      0%, 100% { transform: translateX(0); }
-      50%       { transform: translateX(6px); }
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(4px); }
     }
 
-    /* Gallery track */
+    /* Pin wrapper: height is set by JS to create scroll space */
+    .projects-pin-wrapper {
+      /* JS sets height: calc(100vh * N) */
+    }
+
+    /* Sticky container: locks to viewport while wrapper scrolls past */
+    .projects-pin-container {
+      position: sticky;
+      top: 60px; /* clear the fixed navbar */
+      height: calc(100vh - 60px);
+      overflow: hidden;
+    }
+
+    /* Track: Motion.js translates this on the X axis */
     .gallery-track {
       display: flex;
-      gap: 0;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      cursor: grab;
-      margin-top: 48px;
+      height: 100%;
+      will-change: transform;
     }
 
-    .gallery-track::-webkit-scrollbar { display: none; }
-    .gallery-track.grabbing { cursor: grabbing; }
-
     .gallery-item {
-      flex: 0 0 auto;
-      width: clamp(320px, 60vw, 780px);
-      height: 80vh;
-      min-height: 480px;
-      scroll-snap-align: start;
+      flex: 0 0 100vw;
+      height: 100%;
       position: relative;
-      border-right: 1px solid var(--rule);
       overflow: hidden;
+      border-right: 1px solid var(--rule);
     }
 
     .gallery-item:last-child { border-right: none; }
@@ -553,7 +555,7 @@
 
     .gallery-item:hover .gallery-placeholder { background: #f0eeea; }
 
-    /* Overlay info */
+    /* Overlay info — initial state set per-panel by Motion */
     .gallery-info {
       position: absolute;
       bottom: 0; left: 0; right: 0;
@@ -562,6 +564,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      will-change: opacity, transform;
     }
 
     .gallery-project-num {
@@ -628,54 +631,15 @@
     .gallery-link:hover { gap: 14px; }
     .gallery-link svg { width: 11px; height: 11px; }
 
-    /* Gallery pagination dots */
-    .gallery-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 24px 0 80px;
-      border-top: 1px solid var(--rule);
-    }
-
-    .gallery-dots {
-      display: flex;
-      gap: 8px;
-    }
-
-    .gallery-dot {
-      width: 24px;
-      height: 1px;
-      background: var(--ink-faint);
-      cursor: pointer;
-      transition: background 0.2s, width 0.3s var(--ease-out);
-      border: none;
-      padding: 0;
-    }
-
-    .gallery-dot.active {
+    /* Scroll progress indicator bar at bottom of pinned gallery */
+    .gallery-progress-bar {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 2px;
       background: var(--ink);
-      width: 40px;
+      width: 0%; /* Motion drives this */
+      will-change: width;
     }
-
-    .gallery-arrows {
-      display: flex;
-      gap: 16px;
-    }
-
-    .gallery-arrow {
-      width: 44px; height: 44px;
-      border: 1px solid var(--rule);
-      background: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-      color: var(--ink);
-    }
-
-    .gallery-arrow:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
-    .gallery-arrow svg { width: 16px; height: 16px; }
 
     /* ============================================================
        SKILLS
@@ -817,31 +781,15 @@
     .back-to-top svg { width: 11px; height: 11px; }
 
     /* ============================================================
-       REVEAL ANIMATION
+       REVEAL — initial hidden state; Motion.js handles animation
     ============================================================ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
-
-    /* stagger helper */
-    .reveal[data-delay="1"] { transition-delay: 0.1s; }
-    .reveal[data-delay="2"] { transition-delay: 0.2s; }
-    .reveal[data-delay="3"] { transition-delay: 0.3s; }
-    .reveal[data-delay="4"] { transition-delay: 0.4s; }
+    .reveal { opacity: 0; }
 
     /* ============================================================
        RESPONSIVE
     ============================================================ */
     @media (max-width: 960px) {
       .skills-grid { grid-template-columns: repeat(2, 1fr); }
-      .gallery-item { width: clamp(300px, 80vw, 620px); }
     }
 
     @media (max-width: 768px) {
@@ -850,7 +798,8 @@
       .about-grid { grid-template-columns: 1fr; gap: 48px; }
       .about-photo-col { position: static; max-width: 200px; }
       .contact-strip { grid-template-columns: 1fr; gap: 32px; }
-      .gallery-item { width: 88vw; height: 70vh; }
+      /* On narrow screens the gallery is still pinned full-width */
+      .gallery-info { padding: 28px 20px 24px; }
     }
 
     @media (max-width: 480px) {
@@ -994,14 +943,16 @@
             <h2 class="section-title">Selected Work</h2>
           </div>
           <div class="projects-scroll-hint" aria-hidden="true">
-            Drag to explore
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            Scroll to explore
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 19 19 12"/></svg>
           </div>
         </div>
       </div>
 
-      <!-- Gallery — full-bleed horizontally -->
-      <div class="gallery-track" id="galleryTrack" role="list">
+      <!-- Gallery — scroll-pinned; Motion.js drives the X translation -->
+      <div class="projects-pin-wrapper" id="projectsPinWrapper">
+        <div class="projects-pin-container" id="projectsPinContainer">
+          <div class="gallery-track" id="galleryTrack" role="list">
 
         <!-- ── PROJECT 1 ─────────────────────────────────────── -->
         <!-- CUSTOMIZE: replace .gallery-placeholder with <img src="assets/project1.jpg" alt="..." class="gallery-img" /> -->
@@ -1098,21 +1049,13 @@
           </div>
         </article>
 
-      </div><!-- /.gallery-track -->
+          </div><!-- /.gallery-track -->
 
-      <div class="container">
-        <div class="gallery-nav">
-          <div class="gallery-dots" id="galleryDots" role="tablist" aria-label="Project navigation"></div>
-          <div class="gallery-arrows">
-            <button class="gallery-arrow" id="galleryPrev" aria-label="Previous project">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-            </button>
-            <button class="gallery-arrow" id="galleryNext" aria-label="Next project">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
+          <!-- Thin progress bar driven by scroll progress -->
+          <div class="gallery-progress-bar" id="galleryProgressBar" aria-hidden="true"></div>
+
+        </div><!-- /.projects-pin-container -->
+      </div><!-- /.projects-pin-wrapper -->
     </section>
 
     <!-- ============================================================
@@ -1246,22 +1189,18 @@
   </footer>
 
   <!-- ============================================================
-       JAVASCRIPT
+       JAVASCRIPT — non-module utilities
   ============================================================ -->
   <script>
-    /* ── Footer year ─────────────────────────────────────────── */
     document.getElementById('footer-year').textContent = new Date().getFullYear();
 
-    /* ── Hamburger ───────────────────────────────────────────── */
     const hamburger = document.getElementById('hamburger');
     const mobileNav = document.getElementById('mobile-nav');
-
     hamburger.addEventListener('click', () => {
       const open = mobileNav.classList.toggle('open');
       hamburger.classList.toggle('open', open);
       hamburger.setAttribute('aria-expanded', String(open));
     });
-
     document.querySelectorAll('.mobile-nav-link').forEach(link => {
       link.addEventListener('click', () => {
         mobileNav.classList.remove('open');
@@ -1269,85 +1208,214 @@
         hamburger.setAttribute('aria-expanded', 'false');
       });
     });
+  </script>
 
-    /* ── Reveal on scroll ────────────────────────────────────── */
-    const observer = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-      }),
-      { threshold: 0.1, rootMargin: '0px 0px -32px 0px' }
+  <!-- ============================================================
+       MOTION.JS — scroll pinning + scroll-driven animations
+       https://motion.dev/tutorials/js-scroll-pinning
+  ============================================================ -->
+  <script type="module">
+    import {
+      animate,
+      scroll,
+      inView,
+      stagger
+    } from "https://cdn.jsdelivr.net/npm/motion@11/dist/motion.js";
+
+    /* ─────────────────────────────────────────────────────────────
+       1. HERO ENTRANCE
+       Elements start opacity:0 via CSS .reveal; Motion animates
+       them in on load with a staggered sequence.
+    ───────────────────────────────────────────────────────────── */
+    animate('#hero .t-label',    { opacity: [0, 1], y: [16, 0] }, { duration: 0.65, delay: 0.1,  ease: [0.16, 1, 0.3, 1] });
+    animate('#hero .hero-name',  { opacity: [0, 1], y: [32, 0] }, { duration: 0.9,  delay: 0.22, ease: [0.16, 1, 0.3, 1] });
+    animate('#hero .hero-cta-row',{ opacity: [0, 1], y: [16, 0] },{ duration: 0.65, delay: 0.48, ease: [0.16, 1, 0.3, 1] });
+    animate('#hero .hero-foot',  { opacity: [0, 1] },             { duration: 0.5,  delay: 0.7,  ease: 'ease-out' });
+
+    /* ─────────────────────────────────────────────────────────────
+       2. HERO PARALLAX EXIT
+       As the user scrolls past the hero, the body content drifts
+       upward and fades — the "pinning" tutorial pattern applied to
+       the departure of the opening panel.
+    ───────────────────────────────────────────────────────────── */
+    scroll(
+      animate('#hero .hero-body', { opacity: [1, 0], y: [0, -60] }, { ease: 'linear' }),
+      {
+        target: document.getElementById('hero'),
+        offset: ['0.25 end', 'end end']
+      }
     );
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    /* ── Gallery ─────────────────────────────────────────────── */
-    const track     = document.getElementById('galleryTrack');
-    const dotsWrap  = document.getElementById('galleryDots');
-    const btnPrev   = document.getElementById('galleryPrev');
-    const btnNext   = document.getElementById('galleryNext');
-    const items     = Array.from(track.querySelectorAll('.gallery-item'));
-    let   current   = 0;
+    /* ─────────────────────────────────────────────────────────────
+       3. SCROLL-PINNED PROJECTS GALLERY  ← core tutorial technique
+       ─────────────────────────────────────────────────────────────
+       Structure:
+         .projects-pin-wrapper   ← tall element (JS sets height)
+           .projects-pin-container  ← position:sticky, clips track
+             .gallery-track       ← Motion translates this on X
 
-    // Build dots
-    items.forEach((_, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', `Go to project ${i + 1}`);
-      dot.setAttribute('role', 'tab');
-      dot.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(dot);
-    });
+       When the wrapper's top edge hits the viewport top, the
+       container sticks. scroll() drives the track from x=0 to
+       x=-(N-1)*100vw exactly as the wrapper scrolls through.
+       When the wrapper's bottom clears, the container unsticks and
+       the next section scrolls in normally.
+    ───────────────────────────────────────────────────────────── */
+    const pinWrapper   = document.getElementById('projectsPinWrapper');
+    const track        = document.getElementById('galleryTrack');
+    const progressBar  = document.getElementById('galleryProgressBar');
+    const galleryItems = track.querySelectorAll('.gallery-item');
+    const N            = galleryItems.length;
 
-    function getDots() { return Array.from(dotsWrap.querySelectorAll('.gallery-dot')); }
+    // Give the wrapper enough height to scroll through N panels.
+    // One extra viewport of height lets the section enter smoothly
+    // before the pin kicks in.
+    pinWrapper.style.height = `calc(100vh * ${N + 0.5})`;
 
-    function goTo(index) {
-      current = Math.max(0, Math.min(index, items.length - 1));
-      const item = items[current];
-      // scroll the track so the item is at the left edge
-      track.scrollTo({ left: item.offsetLeft, behavior: 'smooth' });
-      getDots().forEach((d, i) => d.classList.toggle('active', i === current));
+    let pinScrollCleanup = null;
+
+    function setupPinnedGallery() {
+      if (pinScrollCleanup) pinScrollCleanup();
+
+      const totalSlide = -(N - 1) * window.innerWidth;
+
+      // The animation that Motion drives with scroll progress (0→1):
+      //   track slides from x:0 to x:totalSlide  (linear, no easing —
+      //   scroll itself is the easing curve via the user's inertia)
+      const slideAnim = animate(
+        track,
+        { x: [0, totalSlide] },
+        { ease: 'linear' }
+      );
+
+      // Bind scroll progress to the animation using the wrapper as target.
+      // offset: ['start start', 'end end'] → animation starts when the
+      // wrapper's top hits the viewport top, ends when its bottom does.
+      pinScrollCleanup = scroll(slideAnim, {
+        target: pinWrapper,
+        offset: ['start start', 'end end']
+      });
+
+      // Also drive the thin progress bar width with the same scroll target
+      scroll(
+        ({ y }) => {
+          progressBar.style.width = `${y.progress * 100}%`;
+        },
+        {
+          target: pinWrapper,
+          offset: ['start start', 'end end']
+        }
+      );
     }
 
-    btnPrev.addEventListener('click', () => goTo(current - 1));
-    btnNext.addEventListener('click', () => goTo(current + 1));
+    setupPinnedGallery();
+    window.addEventListener('resize', setupPinnedGallery, { passive: true });
 
-    // Sync dots when user drags / scrolls manually
-    let scrollTimer;
-    track.addEventListener('scroll', () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        const scrollLeft = track.scrollLeft;
-        let closest = 0, minDist = Infinity;
-        items.forEach((item, i) => {
-          const dist = Math.abs(item.offsetLeft - scrollLeft);
-          if (dist < minDist) { minDist = dist; closest = i; }
-        });
-        current = closest;
-        getDots().forEach((d, i) => d.classList.toggle('active', i === current));
-      }, 80);
-    }, { passive: true });
+    /* ─────────────────────────────────────────────────────────────
+       4. GALLERY INFO PANELS — slide-up reveal as each panel
+          comes into the horizontal viewport via the X translation.
+          We stagger-reveal each .gallery-info when its parent
+          .gallery-item is "centered" (scroll-linked via the wrapper).
+    ───────────────────────────────────────────────────────────── */
+    galleryItems.forEach((item, i) => {
+      // Each item occupies a 1/N slice of the total scroll range.
+      const start  = i / N;
+      const center = (i + 0.35) / N;
 
-    // Drag-to-scroll
-    let isDragging = false, startX, startScroll;
-
-    track.addEventListener('mousedown', e => {
-      isDragging = true;
-      track.classList.add('grabbing');
-      startX     = e.pageX - track.offsetLeft;
-      startScroll = track.scrollLeft;
+      scroll(
+        ({ y }) => {
+          if (y.progress >= start && y.progress < (i + 1) / N) {
+            const localP = (y.progress - start) * N; // 0→1 within this item
+            const info   = item.querySelector('.gallery-info');
+            if (info) {
+              const yVal = Math.max(0, (1 - localP * 3)) * 32; // slides up
+              const op   = Math.min(1, localP * 3);
+              info.style.opacity   = op;
+              info.style.transform = `translateY(${yVal}px)`;
+            }
+          }
+        },
+        { target: pinWrapper, offset: ['start start', 'end end'] }
+      );
     });
 
-    window.addEventListener('mousemove', e => {
-      if (!isDragging) return;
-      e.preventDefault();
-      const x    = e.pageX - track.offsetLeft;
-      const walk = (x - startX) * 1.2;
-      track.scrollLeft = startScroll - walk;
+    // Set initial state for gallery-info panels
+    document.querySelectorAll('.gallery-info').forEach((info, i) => {
+      if (i > 0) {
+        info.style.opacity   = '0';
+        info.style.transform = 'translateY(32px)';
+      }
     });
 
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-      track.classList.remove('grabbing');
-    });
+    /* ─────────────────────────────────────────────────────────────
+       5. ABOUT — photo parallax + text reveal
+          The photo column drifts at a slower rate than the page
+          scroll, creating the illusion of depth.
+    ───────────────────────────────────────────────────────────── */
+    scroll(
+      animate('.about-photo-col', { y: [0, 48] }, { ease: 'linear' }),
+      {
+        target: document.getElementById('about'),
+        offset: ['start end', 'end start']
+      }
+    );
+
+    /* ─────────────────────────────────────────────────────────────
+       6. UNIVERSAL inView REVEALS
+          Every .reveal element outside #hero fades + rises into
+          place once it enters the viewport. Motion's inView fires
+          the callback once and the stop() prevents re-triggering.
+    ───────────────────────────────────────────────────────────── */
+    inView('.reveal', ({ target, stop }) => {
+      // Skip hero — handled by entrance animation above
+      if (target.closest('#hero')) return;
+
+      const delay = parseFloat(target.dataset.delay || 0) * 0.12;
+
+      animate(
+        target,
+        { opacity: [0, 1], y: [24, 0] },
+        { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }
+      );
+
+      stop(); // fire once
+    }, { margin: '-8% 0px -8% 0px' });
+
+    /* ─────────────────────────────────────────────────────────────
+       7. SKILLS — staggered item reveal per column
+    ───────────────────────────────────────────────────────────── */
+    inView('.skill-col', ({ target, stop }) => {
+      animate(
+        target.querySelectorAll('.skill-item'),
+        { opacity: [0, 1], x: [-10, 0] },
+        { delay: stagger(0.055), duration: 0.45, ease: [0.16, 1, 0.3, 1] }
+      );
+      stop();
+    }, { margin: '-10% 0px -10% 0px' });
+
+    /* ─────────────────────────────────────────────────────────────
+       8. CONTACT HEADLINE — large type sweeps up
+    ───────────────────────────────────────────────────────────── */
+    inView('.contact-headline', ({ target, stop }) => {
+      animate(
+        target,
+        { opacity: [0, 1], y: [56, 0] },
+        { duration: 1.1, ease: [0.16, 1, 0.3, 1] }
+      );
+      stop();
+    }, { margin: '-5% 0px -5% 0px' });
+
+    /* ─────────────────────────────────────────────────────────────
+       9. SECTION TITLES — subtle clip-up per section head
+    ───────────────────────────────────────────────────────────── */
+    inView('.section-title', ({ target, stop }) => {
+      animate(
+        target,
+        { opacity: [0, 1], y: [20, 0] },
+        { duration: 0.75, ease: [0.16, 1, 0.3, 1] }
+      );
+      stop();
+    }, { margin: '-5% 0px -5% 0px' });
+
   </script>
 
 </body>
