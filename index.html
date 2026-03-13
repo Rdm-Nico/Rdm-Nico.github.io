@@ -725,6 +725,20 @@
     .back-to-top:hover { color: var(--ink); gap: 16px; }
     .back-to-top svg { width: 11px; height: 11px; }
 
+
+     /* ─── PROGRESS BAR ─── */
+        .progress {
+            position: fixed;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent);
+            bottom: 0;
+            transform: scaleX(0);
+            transform-origin: center center;
+            z-index: 100;
+        }
+
     /* ============================================================
        RESPONSIVE
     ============================================================ */
@@ -1081,6 +1095,9 @@
         </div>
     </section>
 
+
+
+    
     <!-- ============================================================
          SKILLS
     ============================================================ -->
@@ -1235,183 +1252,27 @@
     });
   </script>
 
-  <!-- ============================================================
-       MOTION.JS — scroll pinning + scroll-driven animations
-       https://motion.dev/tutorials/js-scroll-pinning
-  ============================================================ -->
-  <script type="module">
-    import {
-      animate,
-      scroll,
-      inView,
-      stagger
-    } from "https://cdn.jsdelivr.net/npm/motion@11/dist/motion.js";
-
-    /* ─────────────────────────────────────────────────────────────
-       1. HERO ENTRANCE
-       Elements start opacity:0 via CSS .reveal; Motion animates
-       them in on load with a staggered sequence.
-    ───────────────────────────────────────────────────────────── */
-    animate('#hero .t-label',    { opacity: [0, 1], y: [16, 0] }, { duration: 0.65, delay: 0.1,  ease: [0.16, 1, 0.3, 1] });
-    animate('#hero .hero-name',  { opacity: [0, 1], y: [32, 0] }, { duration: 0.9,  delay: 0.22, ease: [0.16, 1, 0.3, 1] });
-    animate('#hero .hero-cta-row',{ opacity: [0, 1], y: [16, 0] },{ duration: 0.65, delay: 0.48, ease: [0.16, 1, 0.3, 1] });
-    animate('#hero .hero-foot',  { opacity: [0, 1] },             { duration: 0.5,  delay: 0.7,  ease: 'ease-out' });
-
-    /* ─────────────────────────────────────────────────────────────
-       2. HERO PARALLAX EXIT
-       As the user scrolls past the hero, the body content drifts
-       upward and fades — the "pinning" tutorial pattern applied to
-       the departure of the opening panel.
-    ───────────────────────────────────────────────────────────── */
-    scroll(
-      animate('#hero .hero-body', { opacity: [1, 0], y: [0, -60] }, { ease: 'linear' }),
-      {
-        target: document.getElementById('hero'),
-        offset: ['0.25 end', 'end end']
-      }
-    );
-
-    /* ─────────────────────────────────────────────────────────────
-       3. SCROLL-PINNED PROJECTS GALLERY (original index.html layout)
-          Guarded: these elements only exist when the pin-wrapper
-          structure is present. If they're absent (e.g. the page uses
-          the img-group-container gallery instead), skip silently so
-          the motion@12 gallery script can run without interference.
-    ───────────────────────────────────────────────────────────── */
-    const pinWrapper = document.getElementById('projectsPinWrapper');
-    const track      = document.getElementById('galleryTrack');
-
-    if (pinWrapper && track) {
-      const progressBar  = document.getElementById('galleryProgressBar');
-      const galleryItems = track.querySelectorAll('.gallery-item');
-      const N            = galleryItems.length;
-
-      pinWrapper.style.height = `calc(100vh * ${N + 0.5})`;
-
-      let pinScrollCleanup = null;
-
-      function setupPinnedGallery() {
-        if (pinScrollCleanup) pinScrollCleanup();
-        const totalSlide = -(N - 1) * window.innerWidth;
-        const slideAnim  = animate(track, { x: [0, totalSlide] }, { ease: 'linear' });
-        pinScrollCleanup = scroll(slideAnim, {
-          target: pinWrapper,
-          offset: ['start start', 'end end']
-        });
-        if (progressBar) {
-          scroll(
-            ({ y }) => { progressBar.style.width = `${y.progress * 100}%`; },
-            { target: pinWrapper, offset: ['start start', 'end end'] }
-          );
-        }
-      }
-
-      setupPinnedGallery();
-      window.addEventListener('resize', setupPinnedGallery, { passive: true });
-
-      galleryItems.forEach((item, i) => {
-        const start = i / N;
-        scroll(
-          ({ y }) => {
-            if (y.progress >= start && y.progress < (i + 1) / N) {
-              const localP = (y.progress - start) * N;
-              const info   = item.querySelector('.gallery-info');
-              if (info) {
-                info.style.opacity   = Math.min(1, localP * 3);
-                info.style.transform = `translateY(${Math.max(0, (1 - localP * 3)) * 32}px)`;
-              }
-            }
-          },
-          { target: pinWrapper, offset: ['start start', 'end end'] }
-        );
-      });
-
-      document.querySelectorAll('.gallery-info').forEach((info, i) => {
-        if (i > 0) { info.style.opacity = '0'; info.style.transform = 'translateY(32px)'; }
-      });
-    }
-
-    /* ─────────────────────────────────────────────────────────────
-       4. ABOUT — photo parallax (only when standalone about section exists)
-    ───────────────────────────────────────────────────────────── */
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      scroll(
-        animate('.about-photo-col', { y: [0, 48] }, { ease: 'linear' }),
-        { target: aboutSection, offset: ['start end', 'end start'] }
-      );
-    }
-
-    /* ─────────────────────────────────────────────────────────────
-       5. UNIVERSAL inView REVEALS
-          Elements inside overflow:hidden scroll containers (like
-          .img-group-container) are clipped from the root viewport
-          and will never trigger IntersectionObserver — reveal them
-          immediately. All others fade+rise on scroll.
-    ───────────────────────────────────────────────────────────── */
-    document.querySelectorAll('.reveal').forEach(el => {
-      // Skip hero — handled by entrance animations above
-      if (el.closest('#hero')) return;
-
-      // Elements clipped inside the horizontal gallery container
-      // will never intersect the viewport: show them right away
-      if (el.closest('.img-group-container')) {
-        el.style.opacity = '1';
-        return;
-      }
-
-      // All other .reveal elements: animate on viewport entry
-      inView(el, ({ target, stop }) => {
-        const delay = parseFloat(target.dataset.delay || 0) * 0.12;
-        animate(target, { opacity: [0, 1], y: [24, 0] },
-          { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] });
-        stop();
-      }, { margin: '-8% 0px -8% 0px' });
-    });
-
-    /* ─────────────────────────────────────────────────────────────
-       7. SKILLS — staggered item reveal per column
-    ───────────────────────────────────────────────────────────── */
-    inView('.skill-col', ({ target, stop }) => {
-      animate(
-        target.querySelectorAll('.skill-item'),
-        { opacity: [0, 1], x: [-10, 0] },
-        { delay: stagger(0.055), duration: 0.45, ease: [0.16, 1, 0.3, 1] }
-      );
-      stop();
-    }, { margin: '-10% 0px -10% 0px' });
-
-    /* ─────────────────────────────────────────────────────────────
-       8. CONTACT HEADLINE — large type sweeps up
-    ───────────────────────────────────────────────────────────── */
-    inView('.contact-headline', ({ target, stop }) => {
-      animate(
-        target,
-        { opacity: [0, 1], y: [56, 0] },
-        { duration: 1.1, ease: [0.16, 1, 0.3, 1] }
-      );
-      stop();
-    }, { margin: '-5% 0px -5% 0px' });
-
-    /* ─────────────────────────────────────────────────────────────
-       9. SECTION TITLES — subtle clip-up per section head
-    ───────────────────────────────────────────────────────────── */
-    inView('.section-title', ({ target, stop }) => {
-      animate(
-        target,
-        { opacity: [0, 1], y: [20, 0] },
-        { duration: 0.75, ease: [0.16, 1, 0.3, 1] }
-      );
-      stop();
-    }, { margin: '-5% 0px -5% 0px' });
-
-  </script>
+  
 
 <script type="module">
     import { animate, scroll } from "https://cdn.jsdelivr.net/npm/motion@12.34.0/+esm"
 
     const items = document.querySelectorAll(".img-container")
+    scroll(
+            animate(".img-group", {
+                transform: ["none", `translateX(-${items.length - 1}00vw)`],
+            }),
+            { target: document.querySelector(".img-group-container") }
+        )
+ 
+        // Anima la progress bar da 0 a larghezza piena
+        scroll(
+            animate(".progress", { scaleX: [0, 1] }),
+            { target: document.querySelector(".img-group-container") }
+        )
 
+    
+    /*
     // Animate gallery horizontally during vertical scroll
     scroll(
         animate(".img-group", {
@@ -1435,7 +1296,8 @@
             // Detach from any scroll-driven layout by committing the final state
             progressEl.style.transform = 'scaleX(1)';
         }
-    }, { target: document.querySelector(".img-group-container") });
+    }, { target: document.querySelector(".img-group-container") }); */
+    
 </script>
 
 
