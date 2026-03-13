@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- CUSTOMIZE: Update page title -->
   <title>Nicolò Rossi — Portfolio</title>
@@ -12,87 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
 
-
   <style>
-    #gallery {
-        width: 98vw;
-    }
-
-    #gallery h3 {
-        font-family: "" Azeret Mono "", monospace;
-    }
-
-    #gallery header,
-    #gallery footer {
-        height: 70vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .img-group-container {
-        height: 500vh;
-        position: relative;
-    }
-
-    .img-group-container > div {
-        position: sticky;
-        top: 0;
-        overflow: hidden;
-        height: 100vh;
-    }
-
-    .img-group {
-        display: flex;
-    }
-
-    .img-container {
-        display: flex;
-        width: 100vw;
-        height: 100vh;
-        flex: 0 0 auto;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
-
-    #gallery header h2 {
-        font-size: 56px;
-        font-weight: 700;
-        letter-spacing: -3px;
-        line-height: 1.2;
-        text-align: center;
-        margin: 0;
-    }
-
-    .img-container h3 {
-        margin: 0;
-        font-size: 50px;
-        font-weight: 700;
-        letter-spacing: -3px;
-        line-height: 1.2;
-        position: relative;
-        bottom: 30px;
-        display: inline-block;
-    }
-
-    .img-container img {
-        width: 300px;
-        height: 400px;
-    }
-
-    .progress {
-        position: fixed;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: var(--ink);
-        bottom: 0;
-        transform: scaleX(0);
-        transform-origin: left center;   /* fills left → right */
-        z-index: 999;
-        pointer-events: none;
-    }
     /* ============================================================
        TOKENS
     ============================================================ */
@@ -538,11 +458,138 @@
       flex-shrink: 0;
     }
 
-     /* ============================================================
-       PROJECTS AND BADGES
-    ============================================================ -->
-    /* Big closing CTA */
-    
+    /* ============================================================
+       PROJECTS — SCROLL-PINNED HORIZONTAL GALLERY (Motion.js)
+    ============================================================ */
+    #projects { padding: 120px 0 0; }
+
+    #projects .section-head { margin-bottom: 48px; }
+
+    .projects-scroll-hint {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .projects-scroll-hint svg {
+      width: 16px; height: 16px;
+      animation: nudge 2.4s var(--ease) infinite;
+    }
+
+    @keyframes nudge {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(4px); }
+    }
+
+    /* Pin wrapper: height is set by JS to create scroll space */
+    .projects-pin-wrapper {
+      /* JS sets height: calc(100vh * N) */
+    }
+
+    /* Sticky container: locks to viewport while wrapper scrolls past */
+    .projects-pin-container {
+      position: sticky;
+      top: 60px; /* clear the fixed navbar */
+      height: calc(100vh - 60px);
+      overflow: hidden;
+    }
+
+    /* Track: Motion.js translates this on the X axis */
+    .gallery-track {
+      display: flex;
+      height: 100%;
+      will-change: transform;
+    }
+
+    .gallery-item {
+      flex: 0 0 100vw;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      border-right: 1px solid var(--rule);
+    }
+
+    .gallery-item:last-child { border-right: none; }
+
+    /* The image / placeholder fills the full panel */
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s var(--ease-out);
+    }
+
+    .gallery-item:hover .gallery-img { transform: scale(1.03); }
+
+    /* Placeholder when no real image is provided */
+    .gallery-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--off-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+
+    .gallery-placeholder-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink-faint);
+    }
+
+    .gallery-placeholder-inner svg { width: 32px; height: 32px; }
+
+    .gallery-placeholder-inner span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .gallery-item:hover .gallery-placeholder { background: #f0eeea; }
+
+    /* Overlay info — initial state set per-panel by Motion */
+    .gallery-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 40px 36px 36px;
+      background: linear-gradient(to top, rgba(255,255,255,0.96) 50%, transparent);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      will-change: opacity, transform;
+    }
+
+    .gallery-project-num {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .gallery-project-title {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .gallery-project-desc {
+      font-size: 0.85rem;
+      color: var(--ink-light);
+      max-width: 40ch;
+      line-height: 1.65;
+    }
+
     .gallery-badges {
       display: flex;
       flex-wrap: wrap;
@@ -560,7 +607,6 @@
       color: var(--ink-light);
       background: var(--white);
     }
-    
 
     .gallery-links {
       display: flex;
@@ -585,6 +631,15 @@
     .gallery-link:hover { gap: 14px; }
     .gallery-link svg { width: 11px; height: 11px; }
 
+    /* Scroll progress indicator bar at bottom of pinned gallery */
+    .gallery-progress-bar {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 2px;
+      background: var(--ink);
+      width: 0%; /* Motion drives this */
+      will-change: width;
+    }
 
     /* ============================================================
        SKILLS
@@ -726,6 +781,11 @@
     .back-to-top svg { width: 11px; height: 11px; }
 
     /* ============================================================
+       REVEAL — initial hidden state; Motion.js handles animation
+    ============================================================ */
+    .reveal { opacity: 0; }
+
+    /* ============================================================
        RESPONSIVE
     ============================================================ */
     @media (max-width: 960px) {
@@ -747,11 +807,12 @@
       .hero-meta { flex-direction: column; gap: 16px; }
       .contact-links { flex-direction: column; align-items: flex-start; gap: 20px; }
     }
-
-</style>
+  </style>
 </head>
+
 <body>
-    <!-- ============================================================
+
+  <!-- ============================================================
        NAVIGATION
   ============================================================ -->
   <header id="navbar">
@@ -760,7 +821,8 @@
       <a href="#hero" class="nav-logo">Nicolò Rossi</a>
 
       <ul class="nav-links">
-        <li><a href="#projects">Projects</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Work</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -777,7 +839,9 @@
       <a href="#contact"  class="mobile-nav-link">Contact</a>
     </div>
   </header>
+
   <main>
+
     <!-- ============================================================
          HERO
     ============================================================ -->
@@ -818,267 +882,180 @@
       </div>
     </section>
 
-    
-    <section class="img-group-container">
-        <div>
-            <ul class="img-group">
-                <li class="img-container">
-                    <!-- ============================================================
-                         Projects
-                    ============================================================ -->
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">001</span>
-                            <h2 class="section-title">Projects</h2>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
-                              <span class="photo-frame-caption">Your photo</span>
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
-
-                             <p class="about-intro reveal">
-                              Name of the project<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              short description
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">React</span>
-                              <span class="gbadge">Node.js</span>
-                              <span class="gbadge">PostgreSQL</span>
-                              <span class="gbadge">WebSockets</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <a href="#" class="gallery-link" target="_blank" rel="noopener">
-                                GitHub
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                </li>
-                <li class="img-container">
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">002</span>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
-                              <span class="photo-frame-caption">Your photo</span>
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
-
-                             <p class="about-intro reveal">
-                              Name of the project<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              short description
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">React</span>
-                              <span class="gbadge">Node.js</span>
-                              <span class="gbadge">PostgreSQL</span>
-                              <span class="gbadge">WebSockets</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <a href="#" class="gallery-link" target="_blank" rel="noopener">
-                                GitHub
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                </li>
-                <li class="img-container">
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">003</span>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
-                              <span class="photo-frame-caption">Your photo</span>
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
-
-                             <p class="about-intro reveal">
-                              Name of the project<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              short description
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">React</span>
-                              <span class="gbadge">Node.js</span>
-                              <span class="gbadge">PostgreSQL</span>
-                              <span class="gbadge">WebSockets</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <a href="#" class="gallery-link" target="_blank" rel="noopener">
-                                GitHub
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                    
-                </li>
-                <li class="img-container">
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">004</span>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
-                              <span class="photo-frame-caption">Your photo</span>
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
-
-                             <p class="about-intro reveal">
-                              Name of the project<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              short description
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">React</span>
-                              <span class="gbadge">Node.js</span>
-                              <span class="gbadge">PostgreSQL</span>
-                              <span class="gbadge">WebSockets</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <a href="#" class="gallery-link" target="_blank" rel="noopener">
-                                GitHub
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                </li>
-                <li class="img-container">
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">005</span>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
-                              <span class="photo-frame-caption">Your photo</span>
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
-
-                             <p class="about-intro reveal">
-                              Name of the project<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              short description
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">React</span>
-                              <span class="gbadge">Node.js</span>
-                              <span class="gbadge">PostgreSQL</span>
-                              <span class="gbadge">WebSockets</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <a href="#" class="gallery-link" target="_blank" rel="noopener">
-                                GitHub
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                </li>
-            </ul>
+    <!-- ============================================================
+         ABOUT
+    ============================================================ -->
+    <section id="about" aria-label="About me">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-head-left">
+            <span class="section-number">01</span>
+            <h2 class="section-title">About</h2>
+          </div>
         </div>
+
+        <div class="about-grid">
+
+          <div class="about-photo-col reveal">
+            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
+            <div class="photo-frame" aria-label="Profile photo placeholder">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
+              <span class="photo-frame-caption">Your photo</span>
+            </div>
+          </div>
+
+          <div class="about-text-col">
+            <!-- CUSTOMIZE: your intro paragraph — make it punchy -->
+            <p class="about-intro reveal">
+              A developer who thinks in systems,<br>
+              but cares about every pixel.
+            </p>
+
+            <!-- CUSTOMIZE: bio -->
+            <p class="about-body reveal">
+              Hi, I'm Nicolò — a software developer based in Italy. I enjoy the full
+              arc of building products: from shaping the architecture to polishing the
+              last animation. I care about code that reads well, interfaces that feel
+              obvious, and systems that hold up under pressure.
+            </p>
+
+            <ul class="about-list reveal" aria-label="Key facts">
+              <!-- CUSTOMIZE: update these bullet points -->
+              <li>Computer Science graduate with 3+ years of professional experience</li>
+              <li>Focused on accessibility, performance, and developer experience</li>
+              <li>Open-source contributor and knowledge-sharing advocate</li>
+              <li>Currently exploring distributed systems and WebAssembly</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PROJECTS — HORIZONTAL SCROLL GALLERY
+    ============================================================ -->
+    <section id="projects" aria-label="Selected work">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-head-left">
+            <span class="section-number">02</span>
+            <h2 class="section-title">Selected Work</h2>
+          </div>
+          <div class="projects-scroll-hint" aria-hidden="true">
+            Scroll to explore
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 19 19 12"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gallery — scroll-pinned; Motion.js drives the X translation -->
+      <div class="projects-pin-wrapper" id="projectsPinWrapper">
+        <div class="projects-pin-container" id="projectsPinContainer">
+          <div class="gallery-track" id="galleryTrack" role="list">
+
+        <!-- ── PROJECT 1 ─────────────────────────────────────── -->
+        <!-- CUSTOMIZE: replace .gallery-placeholder with <img src="assets/project1.jpg" alt="..." class="gallery-img" /> -->
+        <article class="gallery-item" role="listitem">
+          <div class="gallery-placeholder">
+            <div class="gallery-placeholder-inner">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg>
+              <span>Project image</span>
+            </div>
+          </div>
+          <div class="gallery-info">
+            <span class="gallery-project-num">01 / 03</span>
+            <!-- CUSTOMIZE: project title -->
+            <h3 class="gallery-project-title">Project Alpha</h3>
+            <!-- CUSTOMIZE: description -->
+            <p class="gallery-project-desc">
+              Full-stack SaaS for team task management with real-time collaboration,
+              role-based access, and analytics.
+            </p>
+            <div class="gallery-badges" aria-label="Tech stack">
+              <!-- CUSTOMIZE: your actual stack -->
+              <span class="gbadge">React</span>
+              <span class="gbadge">Node.js</span>
+              <span class="gbadge">PostgreSQL</span>
+              <span class="gbadge">WebSockets</span>
+            </div>
+            <div class="gallery-links">
+              <!-- CUSTOMIZE: your actual URLs -->
+              <a href="#" class="gallery-link" target="_blank" rel="noopener">
+                GitHub
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ── PROJECT 2 ─────────────────────────────────────── -->
+        <article class="gallery-item" role="listitem">
+          <div class="gallery-placeholder">
+            <div class="gallery-placeholder-inner">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg>
+              <span>Project image</span>
+            </div>
+          </div>
+          <div class="gallery-info">
+            <span class="gallery-project-num">02 / 03</span>
+            <h3 class="gallery-project-title">CLI Toolkit</h3>
+            <p class="gallery-project-desc">
+              Open-source command-line tool that automates project scaffolding,
+              git workflows, and environment setup in one interactive prompt.
+            </p>
+            <div class="gallery-badges">
+              <span class="gbadge">Python</span>
+              <span class="gbadge">Click</span>
+              <span class="gbadge">Shell</span>
+              <span class="gbadge">PyPI</span>
+            </div>
+            <div class="gallery-links">
+              <a href="#" class="gallery-link" target="_blank" rel="noopener">
+                GitHub
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ── PROJECT 3 ─────────────────────────────────────── -->
+        <article class="gallery-item" role="listitem">
+          <div class="gallery-placeholder">
+            <div class="gallery-placeholder-inner">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg>
+              <span>Project image</span>
+            </div>
+          </div>
+          <div class="gallery-info">
+            <span class="gallery-project-num">03 / 03</span>
+            <h3 class="gallery-project-title">Data Dashboard</h3>
+            <p class="gallery-project-desc">
+              Interactive analytics dashboard ingesting CSV/JSON data with
+              customisable charts, filterable tables, and PDF export.
+            </p>
+            <div class="gallery-badges">
+              <span class="gbadge">TypeScript</span>
+              <span class="gbadge">D3.js</span>
+              <span class="gbadge">Vite</span>
+              <span class="gbadge">REST API</span>
+            </div>
+            <div class="gallery-links">
+              <a href="#" class="gallery-link" target="_blank" rel="noopener">
+                GitHub
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+          </div><!-- /.gallery-track -->
+
+          <!-- Thin progress bar driven by scroll progress -->
+          <div class="gallery-progress-bar" id="galleryProgressBar" aria-hidden="true"></div>
+
+        </div><!-- /.projects-pin-container -->
+      </div><!-- /.projects-pin-wrapper -->
     </section>
 
     <!-- ============================================================
@@ -1151,14 +1128,15 @@
       </div>
     </section>
 
-
-
+    <!-- ============================================================
+         CONTACT
+    ============================================================ -->
     <section id="contact" aria-label="Contact">
       <div class="container">
 
         <!-- CUSTOMIZE: update the headline -->
         <h2 class="contact-headline reveal">
-          <em>Contact </em> me
+          <em>Contact me</em>
         </h2>
 
         <div class="contact-strip reveal">
@@ -1195,8 +1173,6 @@
     </section>
 
   </main>
-  
-
 
   <!-- ============================================================
        FOOTER
@@ -1212,8 +1188,7 @@
     </div>
   </footer>
 
-
-<!-- ============================================================
+  <!-- ============================================================
        JAVASCRIPT — non-module utilities
   ============================================================ -->
   <script>
@@ -1443,124 +1418,5 @@
 
   </script>
 
-<script type="module">
-    import { animate, scroll } from "https://cdn.jsdelivr.net/npm/motion@12.34.0/+esm"
-
-    const items = document.querySelectorAll(".img-container")
-
-    // Animate gallery horizontally during vertical scroll
-    scroll(
-        animate(".img-group", {
-            transform: ["none", `translateX(-${items.length - 1}00vw)`],
-        }),
-        { target: document.querySelector(".img-group-container") }
-    )
-
-    // Progress bar — one-directional: only increases, never shrinks back.
-    // Once it reaches 1 (full width) it freezes permanently.
-    const progressEl = document.querySelector('.progress');
-    let maxP = 0;
-    let frozen = false;
-
-    scroll(({ y }) => {
-        if (frozen) return;
-        maxP = Math.max(maxP, y.progress);
-        progressEl.style.transform = `scaleX(${maxP})`;
-        if (maxP >= 1) {
-            frozen = true;
-            // Detach from any scroll-driven layout by committing the final state
-            progressEl.style.transform = 'scaleX(1)';
-        }
-    }, { target: document.querySelector(".img-group-container") });
-</script>
-
-
-  <!-- Progress bar lives here as a direct <body> child so
-       position:fixed is always relative to the viewport,
-       regardless of any transform/stacking context inside <main> -->
-  <div class="progress"></div>
-
-  <!-- ============================================================
-       HERO TITLE — glitch / scramble animation
-  ============================================================ -->
-  <script>
-    (function heroScramble() {
-      const el = document.querySelector('#hero .hero-name');
-      if (!el) return;
-
-      // Two text lines that map to the two text nodes split by <br>
-      const lines  = ['Nicolò', 'Rossi'];
-      const total  = lines.join('').length;
-
-      // Minimal character pool — uppercase + a handful of symbols.
-      // Kept sparse so the effect reads as a brief glitch, not noise.
-      const pool   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ01!?#/\\|%';
-
-      function rndChar() {
-        return pool[Math.floor(Math.random() * pool.length)];
-      }
-
-      function scramble() {
-        const DURATION = 900; // ms — total length of one scramble cycle
-        let   start    = null;
-
-        function frame(ts) {
-          if (!start) start = ts;
-          const elapsed  = ts - start;
-          const t        = Math.min(elapsed / DURATION, 1); // 0 → 1
-
-          // Phase split:
-          //   0.00 → 0.45  chaos ramps UP   (characters randomise)
-          //   0.45 → 1.00  reveal LEFT → RIGHT back to original
-          let html = '';
-          let ci   = 0;
-
-          for (let li = 0; li < lines.length; li++) {
-            const line = lines[li];
-
-            for (let i = 0; i < line.length; i++) {
-              const orig = line[i];
-
-              if (t < 0.45) {
-                // Chaos ramps in using a sine curve so the start is gentle
-                const chaos = Math.sin((t / 0.45) * Math.PI * 0.5);
-                html += Math.random() < chaos ? rndChar() : orig;
-              } else {
-                // Reveal: characters resolve from left to right
-                const resolveT   = (t - 0.45) / 0.55;          // 0 → 1
-                const revealed   = Math.floor(resolveT * total); // how many chars resolved
-                html += ci < revealed ? orig : rndChar();
-              }
-              ci++;
-            }
-
-            if (li < lines.length - 1) html += '<br>';
-          }
-
-          el.innerHTML = html;
-
-          if (t < 1) {
-            requestAnimationFrame(frame);
-          } else {
-            // Guarantee clean restore
-            el.innerHTML = lines.join('<br>');
-          }
-        }
-
-        requestAnimationFrame(frame);
-      }
-
-      // Start the first scramble after entrance animation completes (~1.2 s),
-      // then repeat on a relaxed interval so it feels like an occasional glitch.
-      function loop() {
-        scramble();
-        setTimeout(loop, 5500 + Math.random() * 2000); // 5.5 – 7.5 s between each
-      }
-
-      setTimeout(loop, 3200); // first trigger: after Motion entrance finishes
-    })();
-  </script>
-
 </body>
 </html>
-
