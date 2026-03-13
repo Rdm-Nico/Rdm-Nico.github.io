@@ -1272,138 +1272,102 @@
     );
 
     /* ─────────────────────────────────────────────────────────────
-       3. SCROLL-PINNED PROJECTS GALLERY  ← core tutorial technique
-       ─────────────────────────────────────────────────────────────
-       Structure:
-         .projects-pin-wrapper   ← tall element (JS sets height)
-           .projects-pin-container  ← position:sticky, clips track
-             .gallery-track       ← Motion translates this on X
-
-       When the wrapper's top edge hits the viewport top, the
-       container sticks. scroll() drives the track from x=0 to
-       x=-(N-1)*100vw exactly as the wrapper scrolls through.
-       When the wrapper's bottom clears, the container unsticks and
-       the next section scrolls in normally.
+       3. SCROLL-PINNED PROJECTS GALLERY (original index.html layout)
+          Guarded: these elements only exist when the pin-wrapper
+          structure is present. If they're absent (e.g. the page uses
+          the img-group-container gallery instead), skip silently so
+          the motion@12 gallery script can run without interference.
     ───────────────────────────────────────────────────────────── */
-    const pinWrapper   = document.getElementById('projectsPinWrapper');
-    const track        = document.getElementById('galleryTrack');
-    const progressBar  = document.getElementById('galleryProgressBar');
-    const galleryItems = track.querySelectorAll('.gallery-item');
-    const N            = galleryItems.length;
+    const pinWrapper = document.getElementById('projectsPinWrapper');
+    const track      = document.getElementById('galleryTrack');
 
-    // Give the wrapper enough height to scroll through N panels.
-    // One extra viewport of height lets the section enter smoothly
-    // before the pin kicks in.
-    pinWrapper.style.height = `calc(100vh * ${N + 0.5})`;
+    if (pinWrapper && track) {
+      const progressBar  = document.getElementById('galleryProgressBar');
+      const galleryItems = track.querySelectorAll('.gallery-item');
+      const N            = galleryItems.length;
 
-    let pinScrollCleanup = null;
+      pinWrapper.style.height = `calc(100vh * ${N + 0.5})`;
 
-    function setupPinnedGallery() {
-      if (pinScrollCleanup) pinScrollCleanup();
+      let pinScrollCleanup = null;
 
-      const totalSlide = -(N - 1) * window.innerWidth;
-
-      // The animation that Motion drives with scroll progress (0→1):
-      //   track slides from x:0 to x:totalSlide  (linear, no easing —
-      //   scroll itself is the easing curve via the user's inertia)
-      const slideAnim = animate(
-        track,
-        { x: [0, totalSlide] },
-        { ease: 'linear' }
-      );
-
-      // Bind scroll progress to the animation using the wrapper as target.
-      // offset: ['start start', 'end end'] → animation starts when the
-      // wrapper's top hits the viewport top, ends when its bottom does.
-      pinScrollCleanup = scroll(slideAnim, {
-        target: pinWrapper,
-        offset: ['start start', 'end end']
-      });
-
-      // Also drive the thin progress bar width with the same scroll target
-      scroll(
-        ({ y }) => {
-          progressBar.style.width = `${y.progress * 100}%`;
-        },
-        {
+      function setupPinnedGallery() {
+        if (pinScrollCleanup) pinScrollCleanup();
+        const totalSlide = -(N - 1) * window.innerWidth;
+        const slideAnim  = animate(track, { x: [0, totalSlide] }, { ease: 'linear' });
+        pinScrollCleanup = scroll(slideAnim, {
           target: pinWrapper,
           offset: ['start start', 'end end']
+        });
+        if (progressBar) {
+          scroll(
+            ({ y }) => { progressBar.style.width = `${y.progress * 100}%`; },
+            { target: pinWrapper, offset: ['start start', 'end end'] }
+          );
         }
+      }
+
+      setupPinnedGallery();
+      window.addEventListener('resize', setupPinnedGallery, { passive: true });
+
+      galleryItems.forEach((item, i) => {
+        const start = i / N;
+        scroll(
+          ({ y }) => {
+            if (y.progress >= start && y.progress < (i + 1) / N) {
+              const localP = (y.progress - start) * N;
+              const info   = item.querySelector('.gallery-info');
+              if (info) {
+                info.style.opacity   = Math.min(1, localP * 3);
+                info.style.transform = `translateY(${Math.max(0, (1 - localP * 3)) * 32}px)`;
+              }
+            }
+          },
+          { target: pinWrapper, offset: ['start start', 'end end'] }
+        );
+      });
+
+      document.querySelectorAll('.gallery-info').forEach((info, i) => {
+        if (i > 0) { info.style.opacity = '0'; info.style.transform = 'translateY(32px)'; }
+      });
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. ABOUT — photo parallax (only when standalone about section exists)
+    ───────────────────────────────────────────────────────────── */
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      scroll(
+        animate('.about-photo-col', { y: [0, 48] }, { ease: 'linear' }),
+        { target: aboutSection, offset: ['start end', 'end start'] }
       );
     }
 
-    setupPinnedGallery();
-    window.addEventListener('resize', setupPinnedGallery, { passive: true });
-
     /* ─────────────────────────────────────────────────────────────
-       4. GALLERY INFO PANELS — slide-up reveal as each panel
-          comes into the horizontal viewport via the X translation.
-          We stagger-reveal each .gallery-info when its parent
-          .gallery-item is "centered" (scroll-linked via the wrapper).
+       5. UNIVERSAL inView REVEALS
+          Elements inside overflow:hidden scroll containers (like
+          .img-group-container) are clipped from the root viewport
+          and will never trigger IntersectionObserver — reveal them
+          immediately. All others fade+rise on scroll.
     ───────────────────────────────────────────────────────────── */
-    galleryItems.forEach((item, i) => {
-      // Each item occupies a 1/N slice of the total scroll range.
-      const start  = i / N;
-      const center = (i + 0.35) / N;
+    document.querySelectorAll('.reveal').forEach(el => {
+      // Skip hero — handled by entrance animations above
+      if (el.closest('#hero')) return;
 
-      scroll(
-        ({ y }) => {
-          if (y.progress >= start && y.progress < (i + 1) / N) {
-            const localP = (y.progress - start) * N; // 0→1 within this item
-            const info   = item.querySelector('.gallery-info');
-            if (info) {
-              const yVal = Math.max(0, (1 - localP * 3)) * 32; // slides up
-              const op   = Math.min(1, localP * 3);
-              info.style.opacity   = op;
-              info.style.transform = `translateY(${yVal}px)`;
-            }
-          }
-        },
-        { target: pinWrapper, offset: ['start start', 'end end'] }
-      );
-    });
-
-    // Set initial state for gallery-info panels
-    document.querySelectorAll('.gallery-info').forEach((info, i) => {
-      if (i > 0) {
-        info.style.opacity   = '0';
-        info.style.transform = 'translateY(32px)';
+      // Elements clipped inside the horizontal gallery container
+      // will never intersect the viewport: show them right away
+      if (el.closest('.img-group-container')) {
+        el.style.opacity = '1';
+        return;
       }
+
+      // All other .reveal elements: animate on viewport entry
+      inView(el, ({ target, stop }) => {
+        const delay = parseFloat(target.dataset.delay || 0) * 0.12;
+        animate(target, { opacity: [0, 1], y: [24, 0] },
+          { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] });
+        stop();
+      }, { margin: '-8% 0px -8% 0px' });
     });
-
-    /* ─────────────────────────────────────────────────────────────
-       5. ABOUT — photo parallax + text reveal
-          The photo column drifts at a slower rate than the page
-          scroll, creating the illusion of depth.
-    ───────────────────────────────────────────────────────────── */
-    scroll(
-      animate('.about-photo-col', { y: [0, 48] }, { ease: 'linear' }),
-      {
-        target: document.getElementById('about'),
-        offset: ['start end', 'end start']
-      }
-    );
-
-    /* ─────────────────────────────────────────────────────────────
-       6. UNIVERSAL inView REVEALS
-          Every .reveal element outside #hero fades + rises into
-          place once it enters the viewport. Motion's inView fires
-          the callback once and the stop() prevents re-triggering.
-    ───────────────────────────────────────────────────────────── */
-    inView('.reveal', ({ target, stop }) => {
-      // Skip hero — handled by entrance animation above
-      if (target.closest('#hero')) return;
-
-      const delay = parseFloat(target.dataset.delay || 0) * 0.12;
-
-      animate(
-        target,
-        { opacity: [0, 1], y: [24, 0] },
-        { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }
-      );
-
-      stop(); // fire once
-    }, { margin: '-8% 0px -8% 0px' });
 
     /* ─────────────────────────────────────────────────────────────
        7. SKILLS — staggered item reveal per column
