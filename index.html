@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- CUSTOMIZE: Update page title -->
   <title>Nicolò Rossi — Portfolio</title>
   <meta name="description" content="Portfolio of Nicolò Rossi, Full-Stack Developer." />
 
@@ -12,87 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
 
-
   <style>
-    #gallery {
-        width: 98vw;
-    }
-
-    #gallery h3 {
-        font-family: "" Azeret Mono "", monospace;
-    }
-
-    #gallery header,
-    #gallery footer {
-        height: 70vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .img-group-container {
-        height: 500vh;
-        position: relative;
-    }
-
-    .img-group-container > div {
-        position: sticky;
-        top: 0;
-        overflow: hidden;
-        height: 100vh;
-    }
-
-    .img-group {
-        display: flex;
-    }
-
-    .img-container {
-        display: flex;
-        width: 100vw;
-        height: 100vh;
-        flex: 0 0 auto;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
-
-    #gallery header h2 {
-        font-size: 56px;
-        font-weight: 700;
-        letter-spacing: -3px;
-        line-height: 1.2;
-        text-align: center;
-        margin: 0;
-    }
-
-    .img-container h3 {
-        margin: 0;
-        font-size: 50px;
-        font-weight: 700;
-        letter-spacing: -3px;
-        line-height: 1.2;
-        position: relative;
-        bottom: 30px;
-        display: inline-block;
-    }
-
-    .img-container img {
-        width: 300px;
-        height: 400px;
-    }
-
-    .progress {
-        position: fixed;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: var(--ink);
-        bottom: 0;
-        transform: scaleX(0);
-        transform-origin: left center;   /* fills left → right */
-        z-index: 999;
-        pointer-events: none;
-    }
     /* ============================================================
        TOKENS — light (default)
     ============================================================ */
@@ -353,7 +272,6 @@
       flex-wrap: wrap;
     }
 
-    /* CUSTOMIZE: your professional title */
     .hero-title {
       font-family: var(--sans);
       font-size: 0.82rem;
@@ -444,7 +362,6 @@
     }
 
     .btn-text:hover { gap: 18px; }
-
     .btn-text svg { width: 12px; height: 12px; flex-shrink: 0; }
 
     .btn-solid {
@@ -532,16 +449,11 @@
       color: var(--ink-faint);
     }
 
-    /* CUSTOMIZE: Replace .photo-frame with <img src="assets/photo.jpg" alt="..." /> */
-    
-
     .photo-frame-caption {
       font-size: 0.68rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
     }
-
-    .about-text-col {}
 
     .about-intro {
       font-family: var(--serif);
@@ -583,11 +495,25 @@
       flex-shrink: 0;
     }
 
-     /* ============================================================
-       PROJECTS AND BADGES
-    ============================================================ -->
-    /* Big closing CTA */
-    
+    /* ============================================================
+       PROJECTS — Vertical fade scroll
+    ============================================================ */
+    #projects-section {
+      padding: 120px 0 0;
+    }
+
+    .project-card {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 0;
+    }
+
+    .project-card > .project-inner {
+      width: 100%;
+    }
+
+    /* ── Badges & links (shared) ── */
     .gallery-badges {
       display: flex;
       flex-wrap: wrap;
@@ -605,7 +531,6 @@
       color: var(--ink-light);
       background: var(--white);
     }
-    
 
     .gallery-links {
       display: flex;
@@ -629,7 +554,6 @@
 
     .gallery-link:hover { gap: 14px; }
     .gallery-link svg { width: 11px; height: 11px; }
-
 
     /* ============================================================
        SKILLS
@@ -676,8 +600,7 @@
 
     /* ============================================================
        CONTACT / FOOTER
-    ============================================================ -->
-    /* Big closing CTA */
+    ============================================================ */
     #contact {
       padding: 120px 0 0;
       border-top: 1px solid var(--rule);
@@ -770,19 +693,19 @@
     .back-to-top:hover { color: var(--ink); gap: 16px; }
     .back-to-top svg { width: 11px; height: 11px; }
 
-
-     /* ─── PROGRESS BAR ─── */
-        .progress {
-            position: fixed;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--accent);
-            bottom: 0;
-            transform: scaleX(0);
-            transform-origin: center center;
-            z-index: 100;
-        }
+    /* ─── PROGRESS BAR ─── */
+    .progress {
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent);
+      bottom: 0;
+      transform: scaleX(0);
+      transform-origin: left center;
+      z-index: 999;
+      pointer-events: none;
+    }
 
     /* ============================================================
        RESPONSIVE
@@ -797,8 +720,7 @@
       .about-grid { grid-template-columns: 1fr; gap: 48px; }
       .about-photo-col { position: static; max-width: 200px; }
       .contact-strip { grid-template-columns: 1fr; gap: 32px; }
-      /* On narrow screens the gallery is still pinned full-width */
-      .gallery-info { padding: 28px 20px 24px; }
+      .project-card { min-height: auto; padding: 60px 0; }
     }
 
     @media (max-width: 480px) {
@@ -806,29 +728,26 @@
       .hero-meta { flex-direction: column; gap: 16px; }
       .contact-links { flex-direction: column; align-items: flex-start; gap: 20px; }
     }
-
-</style>
+  </style>
 </head>
 <body>
-    <!-- ============================================================
+
+  <!-- ============================================================
        NAVIGATION
   ============================================================ -->
   <header id="navbar">
     <nav class="container nav-inner" aria-label="Main navigation">
-      <!-- CUSTOMIZE: your name / logo -->
       <a href="#hero" class="nav-logo">Nicolò Rossi</a>
 
       <ul class="nav-links">
-        <li><a href="#projects">Projects</a></li>
+        <li><a href="#projects-section">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
 
       <div style="display:flex;align-items:center;gap:12px;">
         <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark / light">
-          <!-- Moon shown in light mode -->
           <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <!-- Sun shown in dark mode (hidden initially) -->
           <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </button>
 
@@ -839,37 +758,25 @@
     </nav>
 
     <div id="mobile-nav">
-      <a href="#about"    class="mobile-nav-link">About</a>
-      <a href="#projects" class="mobile-nav-link">Work</a>
-      <a href="#skills"   class="mobile-nav-link">Skills</a>
-      <a href="#contact"  class="mobile-nav-link">Contact</a>
+      <a href="#about"              class="mobile-nav-link">About</a>
+      <a href="#projects-section"   class="mobile-nav-link">Work</a>
+      <a href="#skills"             class="mobile-nav-link">Skills</a>
+      <a href="#contact"            class="mobile-nav-link">Contact</a>
     </div>
   </header>
+
   <main>
+
     <!-- ============================================================
          HERO
     ============================================================ -->
     <section id="hero" aria-label="Introduction">
       <div class="container hero-body">
         <p class="t-label hero-index reveal">Portfolio</p>
-
-        <!-- CUSTOMIZE: your name -->
         <h1 class="t-display hero-name reveal" data-delay="1">Nicolò<br>Rossi</h1>
 
-        
-        <!-- <div class="hero-meta reveal" data-delay="2">
-          <span class="hero-title">Full-Stack Developer</span>
-          
-          <p class="hero-tagline">
-            I design and build fast, accessible web applications.<br>
-            Clean code, thoughtful interfaces, real impact.
-          </p>
-        </div> -->
-        
-        
-
         <div class="hero-cta-row reveal" data-delay="3" style="margin-top: 48px;">
-          <a href="#projects" class="btn-text">
+          <a href="#projects-section" class="btn-text">
             View projects
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
@@ -877,7 +784,6 @@
       </div>
 
       <div class="container hero-foot reveal" data-delay="4">
-        <!-- CUSTOMIZE: location -->
         <span class="hero-foot-label">Based in Italy</span>
         <div class="scroll-line">
           <span></span>
@@ -886,272 +792,217 @@
       </div>
     </section>
 
-    
-    <section class="img-group-container">
-        <div>
-            <ul class="img-group">
-                <li class="img-container">
-                    <!-- ============================================================
-                         Projects
-                    ============================================================ -->
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">001</span>
-                            <h2 class="section-title">Projects</h2>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                            
-                              <img src="assets/Srl.jpeg" alt="CV Projct" style="width:100%;aspect-ratio:3/4;" />
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
 
-                             <p class="about-intro reveal">
-                              Sign Language Recognition Sentiment Enhanced<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              With Mattia Colombari and Omayma Moussadek
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">Python</span>
-                              <span class="gbadge">Computer Vision</span>
-                              <span class="gbadge">Slurm</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <!-- CUSTOMIZE: replace href with your GitHub URL -->
-                              <a href="https://github.com/MColombari/SLR_Sentiment_Enhanced?tab=readme-ov-file" class="contact-link" target="_blank" rel="noopener noreferrer">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                                GitHub
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                </li>
-                <li class="img-container">
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">002</span>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
-                              <span class="photo-frame-caption">Your photo</span>
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
-
-                             <p class="about-intro reveal">
-                              Name of the project<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              short description
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">React</span>
-                              <span class="gbadge">Node.js</span>
-                              <span class="gbadge">PostgreSQL</span>
-                              <span class="gbadge">WebSockets</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <a href="#" class="gallery-link" target="_blank" rel="noopener">
-                                GitHub
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                </li>
-                <li class="img-container">
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">003</span>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
-                              <span class="photo-frame-caption">Your photo</span>
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
-
-                             <p class="about-intro reveal">
-                              Name of the project<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              short description
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">React</span>
-                              <span class="gbadge">Node.js</span>
-                              <span class="gbadge">PostgreSQL</span>
-                              <span class="gbadge">WebSockets</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <a href="#" class="gallery-link" target="_blank" rel="noopener">
-                                GitHub
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                    
-                </li>
-                <li class="img-container">
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">004</span>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
-                              <span class="photo-frame-caption">Your photo</span>
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
-
-                             <p class="about-intro reveal">
-                              Name of the project<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              short description
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">React</span>
-                              <span class="gbadge">Node.js</span>
-                              <span class="gbadge">PostgreSQL</span>
-                              <span class="gbadge">WebSockets</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <a href="#" class="gallery-link" target="_blank" rel="noopener">
-                                GitHub
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                </li>
-                <li class="img-container">
-                    <section id="projects" aria-label="Selected work">
-                      <div class="container">
-                        <div class="section-head reveal">
-                          <div class="section-head-left">
-                            <span class="section-number">005</span>
-                          </div>
-                        </div>
-                    
-                        <div class="about-grid">
-                        
-                          <div class="about-photo-col reveal">
-                            <!-- CUSTOMIZE: replace with <img src="assets/photo.jpg" alt="Nicolò Rossi" style="width:100%;aspect-ratio:3/4;object-fit:cover;" /> -->
-                            <div class="photo-frame" aria-label="Profile photo placeholder">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/></svg>
-                              <span class="photo-frame-caption">Your photo</span>
-                            </div>
-                          </div>
-                      
-                          <div class="about-text-col">
-
-                             <p class="about-intro reveal">
-                              Name of the project<br>
-                              
-                            </p>
-
-                            <p class="about-body reveal">
-                              short description
-                            </p>
-
-                          <!-- CUSTOMIZE: your actual stack -->
-                            <div class="gallery-badges" aria-label="Tech stack">
-                              <span class="gbadge">React</span>
-                              <span class="gbadge">Node.js</span>
-                              <span class="gbadge">PostgreSQL</span>
-                              <span class="gbadge">WebSockets</span>
-                            </div>
-
-                            <div class="gallery-links">
-                              <a href="#" class="gallery-link" target="_blank" rel="noopener">
-                                GitHub
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </section>
-                </li>
-            </ul>
+    <!-- ============================================================
+         PROJECTS — Vertical scroll with fade
+    ============================================================ -->
+    <section id="projects-section" aria-label="Selected work">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-head-left">
+            <h2 class="section-title">Projects</h2>
+          </div>
         </div>
+      </div>
+
+      <!-- PROJECT 001 -->
+      <section class="project-card">
+        <div class="project-inner">
+          <div class="container">
+            <div class="about-grid">
+
+              <div class="about-photo-col">
+                <div class="photo-frame">
+                  <img src="assets/Srl.jpeg" alt="SLR Project" style="width:100%;aspect-ratio:3/4;object-fit:cover;" />
+                </div>
+              </div>
+
+              <div class="about-text-col">
+                <p class="section-number" style="margin-bottom:12px;">001</p>
+                <p class="about-intro">
+                  Sign Language Recognition Sentiment Enhanced
+                </p>
+                <p class="about-body">
+                  Sign Language Recognition with skeleton extraction, emotion prediction and similar sign retrieval.  With Mattia Colombari and Omayma Moussadek.
+                </p>
+                <div class="gallery-badges" aria-label="Tech stack">
+                  <span class="gbadge">Python</span>
+                  <span class="gbadge">Computer Vision</span>
+                  <span class="gbadge">Slurm</span>
+                </div>
+                <div class="gallery-links">
+                  <a href="https://github.com/MColombari/SLR_Sentiment_Enhanced?tab=readme-ov-file" class="contact-link" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECT 002 -->
+      <section class="project-card">
+        <div class="project-inner">
+          <div class="container">
+            <div class="about-grid">
+
+              <div class="about-photo-col">
+                <div class="photo-frame" aria-label="Profile photo placeholder">
+                  
+                  <img src="assets/Deep-reinforcement-learning-scheme-A-deep-neural-network-learns-the-policy.png" alt="SLR Project" style="width:100%;aspect-ratio:3/4;object-fit:fill;" />
+                </div>
+              </div>
+
+              <div class="about-text-col">
+                <p class="section-number" style="margin-bottom:12px;">002</p>
+                <p class="about-intro">
+                     RL Agents in a Production System
+                </p>
+                <p class="about-body">
+                  Survey of Reinforcement Learning Agent for scheduling products in a manufacturing firm.
+                </p>
+                <div class="gallery-badges" aria-label="Tech stack">
+                  <span class="gbadge">Python</span>
+                  <span class="gbadge">Reinforcement Learning</span>
+                </div>
+                <div class="gallery-links">
+                  <a href="https://github.com/Rdm-Nico/RL_Agents_Comparison" class="contact-link" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECT 003 -->
+      <section class="project-card">
+        <div class="project-inner">
+          <div class="container">
+            <div class="about-grid">
+
+              <div class="about-photo-col">
+                <div class="photo-frame" aria-label="Profile photo placeholder">
+                  <img src="assets/genetic_project.png" alt="SLR Project" style="width:100%;aspect-ratio:3/4;object-fit:fill;" />
+                </div>
+              </div>
+
+              <div class="about-text-col">
+                <p class="section-number" style="margin-bottom:12px;">003</p>
+                <p class="about-intro">
+                  Genetic Algorithm Mediator
+                </p>
+                <p class="about-body">
+                  production schedules in a supply chain using Automated Negotiation. With Kang Chun-Yu and Lin Chin-Jung.
+                </p>
+                <div class="gallery-badges" aria-label="Tech stack">
+                  <span class="gbadge">Java</span>
+                  <span class="gbadge">Genetic Algorithm</span>
+                </div>
+                <div class="gallery-links">
+                  <a href="https://github.com/Rdm-Nico/CI_Project/tree/main" class="contact-link" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECT 004 -->
+      <section class="project-card">
+        <div class="project-inner">
+          <div class="container">
+            <div class="about-grid">
+
+              <div class="about-photo-col">
+                <div class="photo-frame" aria-label="Profile photo placeholder">
+                  <video
+                    src="assets/GA.mov"
+                    autoplay
+                    loop
+                    muted
+                    playsinline
+                    style="width:100%; aspect-ratio:3/4; object-fit:cover;"
+                  ></video>
+                </div>
+              </div>
+
+              <div class="about-text-col">
+                <p class="section-number" style="margin-bottom:12px;">004</p>
+                <p class="about-intro">
+                  When Wavelets Meet Dynamic Graph in Traffic Forecasting
+                </p>
+                <p class="about-body">
+                  A survey in traffic forecasting with Graph Neural Networks.
+                </p>
+                <div class="gallery-badges" aria-label="Tech stack">
+                  <span class="gbadge">Python</span>
+                  <span class="gbadge">Neo4j</span>
+                </div>
+                <div class="gallery-links">
+                  <div class="gallery-links">
+                    <a href="https://github.com/Rdm-Nico/Traffic_Prediction" class="contact-link" target="_blank" rel="noopener noreferrer">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                      GitHub
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECT 005 -->
+      <section class="project-card">
+        <div class="project-inner">
+          <div class="container">
+            <div class="about-grid">
+
+              <div class="about-photo-col">
+                <div class="photo-frame" aria-label="Profile photo placeholder">
+                  <img src="assets/what.png" alt="SLR Project" style="width:100%;aspect-ratio:3/4;object-fit:fill;" />
+                </div>
+              </div>
+
+              <div class="about-text-col">
+                <p class="section-number" style="margin-bottom:12px;">005</p>
+                <p class="about-intro">
+                  Whatsapp Chatbot with Agentic Ability 
+                </p>
+                <p class="about-body">
+                  Fine tuning of an AI Agent for understanding and updating information via WhatsApp messages.
+                </p>
+                <div class="gallery-badges" aria-label="Tech stack">
+                  <span class="gbadge">Python</span>
+                  <span class="gbadge">vLLM</span>
+                  <span class="gbadge">LLM</span>
+                  <span class="gbadge">Reinforcement Learning</span>
+                  <span class="gbadge">PostgreSQL</span>
+                  <span class="gbadge">Podman</span>
+                </div>
+                
+
+            </div>
+          </div>
+        </div>
+      </section>
+
     </section>
+    <!-- end #projects-section -->
 
 
-
-    
     <!-- ============================================================
          SKILLS
     ============================================================ -->
@@ -1159,24 +1010,16 @@
       <div class="container">
         <div class="section-head reveal">
           <div class="section-head-left">
-            <span class="section-number">03</span>
             <h2 class="section-title">Skills</h2>
           </div>
         </div>
 
-        <!-- CUSTOMIZE: update categories and skill items to match your stack -->
         <div class="skills-grid reveal">
-
           <div class="skill-col">
             <p class="skill-col-title">Frontend</p>
             <ul class="skill-items">
-              <li class="skill-item">HTML5 / CSS3</li>
               <li class="skill-item">JavaScript</li>
-              <li class="skill-item">TypeScript</li>
               <li class="skill-item">React</li>
-              <li class="skill-item">Vue.js</li>
-              <li class="skill-item">Tailwind CSS</li>
-              <li class="skill-item">Figma</li>
             </ul>
           </div>
 
@@ -1184,89 +1027,73 @@
             <p class="skill-col-title">Backend</p>
             <ul class="skill-items">
               <li class="skill-item">Node.js</li>
+              <li class="skill-item">Java</li>
+              <li class="skill-item">C++</li>
               <li class="skill-item">Python</li>
               <li class="skill-item">FastAPI</li>
-              <li class="skill-item">Express</li>
-              <li class="skill-item">REST / GraphQL</li>
               <li class="skill-item">PostgreSQL</li>
-              <li class="skill-item">MongoDB</li>
             </ul>
           </div>
 
           <div class="skill-col">
-            <p class="skill-col-title">Tools & DevOps</p>
+            <p class="skill-col-title">Tools</p>
             <ul class="skill-items">
               <li class="skill-item">Git</li>
-              <li class="skill-item">Docker</li>
-              <li class="skill-item">GitHub Actions</li>
+              <li class="skill-item">Docker&Podman</li>
               <li class="skill-item">Linux</li>
-              <li class="skill-item">Nginx</li>
-              <li class="skill-item">Vite</li>
-              <li class="skill-item">Jest</li>
+              <li class="skill-item">vLLM</li>
             </ul>
           </div>
 
+          
           <div class="skill-col">
-            <p class="skill-col-title">Cloud & Infra</p>
+            <p class="skill-col-title">ML/DL Libraries</p>
             <ul class="skill-items">
-              <li class="skill-item">AWS</li>
-              <li class="skill-item">Vercel</li>
-              <li class="skill-item">Netlify</li>
-              <li class="skill-item">GitHub Pages</li>
-              <li class="skill-item">Supabase</li>
-              <li class="skill-item">Redis</li>
+              <li class="skill-item">NumPy</li>
+              <li class="skill-item">PyTorch</li>
+              <li class="skill-item">TensorFlow</li>
+              <li class="skill-item">Verl</li>
             </ul>
           </div>
-
         </div>
       </div>
     </section>
 
 
-
+    <!-- ============================================================
+         CONTACT
+    ============================================================ -->
     <section id="contact" aria-label="Contact">
       <div class="container">
-
-        <!-- CUSTOMIZE: update the headline -->
         <h2 class="contact-headline reveal">
           <em>Contact </em> me
         </h2>
 
         <div class="contact-strip reveal">
           <nav class="contact-links" aria-label="Contact and social links">
-
-            <!-- CUSTOMIZE: replace href with your GitHub URL -->
             <a href="https://github.com/Rdm-Nico" class="contact-link" target="_blank" rel="noopener noreferrer">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
               GitHub
             </a>
-
-            <!-- CUSTOMIZE: replace href with your LinkedIn URL -->
-            <a href="https://linkedin.com/in/yourprofile" class="contact-link" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/in/nicol%C3%B3-rossi-a93b801a7/" class="contact-link" target="_blank" rel="noopener noreferrer">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
               LinkedIn
             </a>
-
-            <!-- CUSTOMIZE: replace with your email address -->
-            <a href="mailto:hello@example.com" class="contact-link">
+            <a href="nicorossi2810@gmail.com" class="contact-link">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              hello@example.com
+              nicorossi2810@gmail.com
             </a>
-
           </nav>
 
-          <!-- CUSTOMIZE: path to your CV PDF -->
-          <a href="assets/cv.pdf" class="btn-solid" download>
+          <a href="assets/CV_Rossi_Nicolò.pdf" class="btn-solid" download>
             Download CV
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         </div>
-
       </div>
     </section>
 
   </main>
-  
 
 
   <!-- ============================================================
@@ -1274,7 +1101,6 @@
   ============================================================ -->
   <footer class="site-footer">
     <div class="container footer-inner">
-      <!-- CUSTOMIZE: your name and year -->
       <p class="footer-copy">&copy; <span id="footer-year"></span> Nicolò Rossi</p>
       <a href="#hero" class="back-to-top">
         Back to top
@@ -1284,13 +1110,17 @@
   </footer>
 
 
-<!-- ============================================================
-       JAVASCRIPT — non-module utilities
+  <!-- Progress bar -->
+  <div class="progress"></div>
+
+
+  <!-- ============================================================
+       JAVASCRIPT — utilities
   ============================================================ -->
   <script>
     document.getElementById('footer-year').textContent = new Date().getFullYear();
 
-    /* ── Dark / light theme toggle ─────────────────────────── */
+    /* ── Dark / light theme toggle ── */
     const html      = document.documentElement;
     const moonIcon  = document.getElementById('icon-moon');
     const sunIcon   = document.getElementById('icon-sun');
@@ -1307,16 +1137,15 @@
       }
     }
 
-    // Respect saved preference, then system preference
-    const saved       = localStorage.getItem('theme');
-    const sysDark     = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const saved   = localStorage.getItem('theme');
+    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyTheme(saved ?? (sysDark ? 'dark' : 'light'));
 
     document.getElementById('theme-toggle').addEventListener('click', () => {
       applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     });
 
-    /* ── Hamburger ─────────────────────────────────────────── */
+    /* ── Hamburger ── */
     const hamburger = document.getElementById('hamburger');
     const mobileNav = document.getElementById('mobile-nav');
     hamburger.addEventListener('click', () => {
@@ -1333,59 +1162,34 @@
     });
   </script>
 
-  
 
-<script type="module">
+  <!-- ============================================================
+       MOTION — Vertical fade scroll for projects + progress bar
+  ============================================================ -->
+  <script type="module">
     import { animate, scroll } from "https://cdn.jsdelivr.net/npm/motion@12.34.0/+esm"
 
-    const items = document.querySelectorAll(".img-container")
-    scroll(
-            animate(".img-group", {
-                transform: ["none", `translateX(-${items.length - 1}00vw)`],
-            }),
-            { target: document.querySelector(".img-group-container") }
-        )
- 
-        // Anima la progress bar da 0 a larghezza piena
-        scroll(
-            animate(".progress", { scaleX: [0, 1] }),
-            { target: document.querySelector(".img-group-container") }
-        )
-
-    
-    /*
-    // Animate gallery horizontally during vertical scroll
-    scroll(
-        animate(".img-group", {
-            transform: ["none", `translateX(-${items.length - 1}00vw)`],
-        }),
-        { target: document.querySelector(".img-group-container") }
-    )
-
-    // Progress bar — one-directional: only increases, never shrinks back.
-    // Once it reaches 1 (full width) it freezes permanently.
-    const progressEl = document.querySelector('.progress');
-    let maxP = 0;
-    let frozen = false;
-
-    scroll(({ y }) => {
-        if (frozen) return;
-        maxP = Math.max(maxP, y.progress);
-        progressEl.style.transform = `scaleX(${maxP})`;
-        if (maxP >= 1) {
-            frozen = true;
-            // Detach from any scroll-driven layout by committing the final state
-            progressEl.style.transform = 'scaleX(1)';
+    // Each .project-inner fades in → stays visible → fades out
+    document.querySelectorAll(".project-card > .project-inner").forEach((item) => {
+      scroll(
+        animate(item, { opacity: [0, 1, 1, 0] }),
+        {
+          target: item,
+          offset: ["start end", "end end", "start start", "end start"],
         }
-    }, { target: document.querySelector(".img-group-container") }); */
-    
-</script>
+      )
+    })
 
+    // Progress bar tied to the whole projects section
+    const projectsSection = document.querySelector("#projects-section")
+    if (projectsSection) {
+      scroll(
+        animate(".progress", { scaleX: [0, 1] }),
+        { target: projectsSection }
+      )
+    }
+  </script>
 
-  <!-- Progress bar lives here as a direct <body> child so
-       position:fixed is always relative to the viewport,
-       regardless of any transform/stacking context inside <main> -->
-  <div class="progress"></div>
 
   <!-- ============================================================
        HERO TITLE — glitch / scramble animation
@@ -1395,12 +1199,8 @@
       const el = document.querySelector('#hero .hero-name');
       if (!el) return;
 
-      // Two text lines that map to the two text nodes split by <br>
       const lines  = ['Nicolò', 'Rossi'];
       const total  = lines.join('').length;
-
-      // Minimal character pool — uppercase + a handful of symbols.
-      // Kept sparse so the effect reads as a brief glitch, not noise.
       const pool   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ01!?#/\\|%';
 
       function rndChar() {
@@ -1408,39 +1208,31 @@
       }
 
       function scramble() {
-        const DURATION = 900; // ms — total length of one scramble cycle
+        const DURATION = 900;
         let   start    = null;
 
         function frame(ts) {
           if (!start) start = ts;
           const elapsed  = ts - start;
-          const t        = Math.min(elapsed / DURATION, 1); // 0 → 1
+          const t        = Math.min(elapsed / DURATION, 1);
 
-          // Phase split:
-          //   0.00 → 0.45  chaos ramps UP   (characters randomise)
-          //   0.45 → 1.00  reveal LEFT → RIGHT back to original
           let html = '';
           let ci   = 0;
 
           for (let li = 0; li < lines.length; li++) {
             const line = lines[li];
-
             for (let i = 0; i < line.length; i++) {
               const orig = line[i];
-
               if (t < 0.45) {
-                // Chaos ramps in using a sine curve so the start is gentle
                 const chaos = Math.sin((t / 0.45) * Math.PI * 0.5);
                 html += Math.random() < chaos ? rndChar() : orig;
               } else {
-                // Reveal: characters resolve from left to right
-                const resolveT   = (t - 0.45) / 0.55;          // 0 → 1
-                const revealed   = Math.floor(resolveT * total); // how many chars resolved
+                const resolveT   = (t - 0.45) / 0.55;
+                const revealed   = Math.floor(resolveT * total);
                 html += ci < revealed ? orig : rndChar();
               }
               ci++;
             }
-
             if (li < lines.length - 1) html += '<br>';
           }
 
@@ -1449,7 +1241,6 @@
           if (t < 1) {
             requestAnimationFrame(frame);
           } else {
-            // Guarantee clean restore
             el.innerHTML = lines.join('<br>');
           }
         }
@@ -1457,17 +1248,14 @@
         requestAnimationFrame(frame);
       }
 
-      // Start the first scramble after entrance animation completes (~1.2 s),
-      // then repeat on a relaxed interval so it feels like an occasional glitch.
       function loop() {
         scramble();
-        setTimeout(loop, 5500 + Math.random() * 2000); // 5.5 – 7.5 s between each
+        setTimeout(loop, 5500 + Math.random() * 2000);
       }
 
-      setTimeout(loop, 3200); // first trigger: after Motion entrance finishes
+      setTimeout(loop, 3200);
     })();
   </script>
 
 </body>
 </html>
-
